@@ -139,9 +139,19 @@ var colorArray = ["red", "#FF0000",
 "darkslategray", "#2F4F4F", 
 "black", "#000000"];
 // colorArray.length는 280
+// 총 140개의 색깔존재
 
 
 var level = 1;
+var timer;
+var pickedColorIndexes;
+
+var score = 0;
+var levelStartTime;	// 빨리 정답을 맞추면 가점을 주기 위해 레벨마다 시작시간 기록
+var prevIncorrectTime;	// 이전에 오답을 입력했던 시간 (레벨 시작시 levelStartTime로 초기화)
+var timerSecond;
+
+var seqCorrectCount = 0;
 
 
 function hexToRgb(hex) {
@@ -159,22 +169,157 @@ function hexToRgb(hex) {
 }
 
 
-function startNormalGame() {
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@블록에 대한 클릭이벤트 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+$('.block').on('click', function(event) {
+	if($(event.target).hasClass("correct")) {	// 정답인경우
+		clearGameTimer();	// 타이머 제거
+		$(event.target).removeClass("correct")
+		addAndDrawScore();
+		progressNormalGame();
 
+		seqCorrectCount++;
+	}
+	else {	// 오답인 경우
+		$(event.target).css("background", "transparent");
+
+		var currentTime = new Date().getTime();
+		timerSecond = timerSecond - ((currentTime - prevIncorrectTime)/1000.0 + 0.5);
+
+		if(timerSecond < 0)
+			timerSecond = 0;
+
+		console.log("TimerSecond : " + timerSecond);
+
+		setProgressBarRefresh(timerSecond, (timerSecond / calculateTimerSecond(level - 1) * 100));
+
+//		console.log("prev : " + prevIncorrectTime + " currentTime : " + currentTime + " cur-prev : " + (currentTime - prevIncorrectTime) / 1000.0);
+
+		prevIncorrectTime = currentTime;
+
+		clearGameTimer();
+		setGameTimer(timerSecond);
+
+		seqCorrectCount = 0;
+	}
+});
+
+$(document).ready(startNormalGame());
+
+function startNormalGame() {
+	progressNormalGame();
 }
 
 function progressNormalGame() {
-	var timerSecond = calculateTimerSecond(level++);
-	$(".progress-bar").css("animation-duration", timerSecond + "s");	// progress bar 애니메이션 시간 지정
+
+
+	var correctAnswerIndex;
+	timerSecond = calculateTimerSecond(level++);
+	progressBarRefresh(timerSecond);	// Progress Bar 설정
+	setGameTimer(timerSecond);			// 타이머 설정(Progress Bar와 sync)
+
+	pickedColorIndexes = new Set();
+	pickColor(9);								// 9개의 색 선택
+	correctAnswerIndex = getRandomInteger(9);	// 그중 한개의 정답 인덱스 선택 (배열이 아닌 블록에 대한 인덱스임.)
+
+	var blockCount = 0;
+	pickedColorIndexes.forEach(function(index) {
+		/*
+		 * correctAnswertIndex는 현재 블록 내의 인덱스를 의미하므로 이 색이 colorArray에서 어느 인덱스 인지를 넘겨줘야함.
+		 */
+		if(blockCount === correctAnswerIndex)
+			displayColorValues(index);
+
+		drawColorAtBlock(blockCount++, index);
+	});									// 블록에 색칠
+
+	signCorrectBlock(correctAnswerIndex);	// 정답블록에 correct라는 이름의 class 등록
+	
+	levelStartTime = new Date().getTime();
+	prevIncorrectTime = levelStartTime;
+}
+
+function pickColor(pickColorNumber) {
+	while(pickedColorIndexes.size !== pickColorNumber) {
+		pickedColorIndexes.add(getRandomInteger(colorArray.length/2) * 2);
+	}
+}
+
+function calculateTimerSecond(level) {
+	return (3*level+3)/level + 3;
+}
+
+function progressBarRefresh(timerSecond) {
+	$(".progress-wrapper").css("width", "100%");
+	$(".progress-bar").css("animation-duration", timerSecond + "s");	// Progress Bar 애니메이션 시간 지정
 
 	// 아래 코드는 아래 링크를 보고 해결
 	// http://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes/3485654#14382251
 	$(".progress-bar").css("display", "none").height();
 	$(".progress-bar").css("display", "block");
 }
-function calculateTimerSecond(level) {
-	return (3*level+3)/level + 3;
+
+function setProgressBarRefresh(timerSecond, widthPercent) {
+	console.log(widthPercent);
+	$(".progress-wrapper").css("width", widthPercent + "%");
+	$(".progress-bar").css("animation-duration", timerSecond + "s");	// Progress Bar 애니메이션 시간 지정
+
+	// 아래 코드는 아래 링크를 보고 해결
+	// http://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes/3485654#14382251
+	$(".progress-bar").css("display", "none").height();
+	$(".progress-bar").css("display", "block");
 }
 
+function setGameTimer(timerSecond) {
+	timer = setTimeout(function() {
+		finishGame();
+	}, timerSecond * 1000);
+}
+
+function clearGameTimer() {
+	clearTimeout(timer);
+}
+
+// 0 <= x <= (limit - 1) 반환
+function getRandomInteger(limit) {
+	return (Math.floor(Math.random() * limit));
+}
+
+function drawColorAtBlock(blockCount, index) {
+	$("#block-" + blockCount).css("background", colorArray[index+1]);
+}
+
+function signCorrectBlock(correctAnswerIndex) {
+	$("#block-" + (correctAnswerIndex)).addClass("correct");
+}
+
+	// Menu에 값을 띄워준다.
+function displayColorValues(correctColorIndex) {
+	// 
+	$("#hex").text(colorArray[correctColorIndex+1]);
+	$("#name").text(colorArray[correctColorIndex]);
+	$("#rgb").text(hexToRgb(colorArray[correctColorIndex+1]));
+}
+
+function addAndDrawScore() {
+	var levelEndTime = new Date().getTime();
+	var currentTakeScore;
+
+	currentTakeScore = Math.floor((1000000 / (levelEndTime - levelStartTime)));	// 빨리푼 경우 가산점
+	currentTakeScore *= Math.floor((10 + seqCorrectCount) / 10.0);	// 연속 정답 횟수 * 10% 씩 가산점
+
+	score += currentTakeScore;
+	$("#score").text(score);
+}
+
+function finishGame() {
+	$(".progress-wrapper").css("width", "100%");
+
+	// 아래 코드는 아래 링크를 보고 해결
+	// http://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes/3485654#14382251
+	$(".progress-bar").css("display", "none").height();
+	$(".progress-bar").css("display", "block");
+
+	alert("Bang!!");
+}
 
 //$(".progress-bar").css("animation-duration", "10s");
