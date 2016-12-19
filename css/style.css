@@ -86,6 +86,7 @@ body {
 
 /* animation-duration: 10s; 를 Javascript로 제어 */
 .progress-bar {
+  animation-duration: 6s;
   animation-name: width;
   background-image: linear-gradient(to right, #4cd964, #5ac8fa, #007aff, #34aadc, #5856d6, #ff2d55);
   background-size: 30em 0.5em;

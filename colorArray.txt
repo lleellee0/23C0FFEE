@@ -1,4 +1,4 @@
-var colorArray = ["red", "#FF0000", 
+{"red", "#FF0000", 
 "crimson", "#DC143C", 
 "firebrick", "#B22222", 
 "maroon", "#800000", 
@@ -62,11 +62,11 @@ var colorArray = ["red", "#FF0000",
 "steelblue", "#4682B4", 
 "aquamarine", "#7FFFD4", 
 "powderblue", "#B0E0E6", 
-"paleturquoise", "#AFEEEE", 
+"paleturquoise, "#AFEEEE", 
 "lightblue", "#ADD8E6", 
 "lightsteelblue", "#B0C4DE", 
 "skyblue", "#87CEEB", 
-"lightskyblue", "#87CEFA", 
+""lightskyblue", "#87CEFA", 
 "mediumturquoise", "#48D1CC", 
 "turquoise", "#40E0D0", 
 "darkturquoise", "#00CED1", 
@@ -137,44 +137,4 @@ var colorArray = ["red", "#FF0000",
 "gray", "#808080", 
 "dimgray", "#696969", 
 "darkslategray", "#2F4F4F", 
-"black", "#000000"];
-// colorArray.length는 280
-
-
-var level = 1;
-
-
-function hexToRgb(hex) {
-    var regArray = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    var rgbString = "rgb(";
-
-    rgbString += parseInt(regArray[1], 16);
-    rgbString += ", ";
-    rgbString += parseInt(regArray[2], 16);
-	rgbString += ", ";
-    rgbString += parseInt(regArray[3], 16);
-    rgbString += ")";
-
-    return rgbString;
-}
-
-
-function startNormalGame() {
-
-}
-
-function progressNormalGame() {
-	var timerSecond = calculateTimerSecond(level++);
-	$(".progress-bar").css("animation-duration", timerSecond + "s");	// progress bar 애니메이션 시간 지정
-
-	// 아래 코드는 아래 링크를 보고 해결
-	// http://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes/3485654#14382251
-	$(".progress-bar").css("display", "none").height();
-	$(".progress-bar").css("display", "block");
-}
-function calculateTimerSecond(level) {
-	return (3*level+3)/level + 3;
-}
-
-
-//$(".progress-bar").css("animation-duration", "10s");
+"black", "#000000"}
