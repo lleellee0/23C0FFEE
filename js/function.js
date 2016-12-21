@@ -203,15 +203,18 @@ $('.block').on('click', function(event) {
 	}
 });
 
+
+// 게임 시작 함수호출
+
 $(document).ready(startNormalGame());
 
 function startNormalGame() {
 	progressNormalGame();
 }
 
+
+// 일반 게임 함수 (매 Level마다 호출됨)
 function progressNormalGame() {
-
-
 	var correctAnswerIndex;
 	timerSecond = calculateTimerSecond(level++);
 	progressBarRefresh(timerSecond);	// Progress Bar 설정
@@ -313,13 +316,14 @@ function addAndDrawScore() {
 
 function finishGame() {
 	$(".progress-wrapper").css("width", "100%");
+	$(".progress-bar").css("animation-duration", "0s");	// 한번 더 애니메이션이 발생하는 버그를 애니메이션 시간을 0으로 바꿔서 해결 (미봉책인 것 같다.)
 
 	// 아래 코드는 아래 링크를 보고 해결
 	// http://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes/3485654#14382251
 	$(".progress-bar").css("display", "none").height();
 	$(".progress-bar").css("display", "block");
 
-	alert("Bang!!");
+//	alert("Bang!!");
 }
 
 //$(".progress-bar").css("animation-duration", "10s");
