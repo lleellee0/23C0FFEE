@@ -171,16 +171,23 @@ function hexToRgb(hex) {
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@블록에 대한 클릭이벤트 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 $('.block').on('click', function(event) {
+	if($(event.target).hasClass("disabled")) {	// 이미 클릭되어 오답처리된 블록
+		return;
+	}
+
+
 	if($(event.target).hasClass("correct")) {	// 정답인경우
 		clearGameTimer();	// 타이머 제거
 		$(event.target).removeClass("correct")
 		addAndDrawScore();
 		progressNormalGame();
 
+		// Combo 설정
 		seqCorrectCount++;
+		$('#combo').text(seqCorrectCount);
 	}
 	else {	// 오답인 경우
-		$(event.target).css("background", "transparent");
+		$(event.target).addClass("disabled");
 
 		var currentTime = new Date().getTime();
 		timerSecond = timerSecond - ((currentTime - prevIncorrectTime)/1000.0 + 0.5);
@@ -200,6 +207,7 @@ $('.block').on('click', function(event) {
 		setGameTimer(timerSecond);
 
 		seqCorrectCount = 0;
+		$('#combo').text(seqCorrectCount);
 	}
 });
 
@@ -215,6 +223,8 @@ function startNormalGame() {
 
 // 일반 게임 함수 (매 Level마다 호출됨)
 function progressNormalGame() {
+	$('.disabled').removeClass('disabled');
+
 	var correctAnswerIndex;
 	timerSecond = calculateTimerSecond(level++);
 	progressBarRefresh(timerSecond);	// Progress Bar 설정

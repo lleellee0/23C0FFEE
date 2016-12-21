@@ -1,4 +1,7 @@
-html {
+@import url(http://fonts.googleapis.com/earlyaccess/hanna.css);
+
+html {	
+	font-family: 'Hanna', serif;
 	width: 99%;
 	height: 98%;
 }
@@ -11,6 +14,11 @@ body {
 
 .col-12-4 {
 	width: 33.333333%;
+	float: left;
+}
+
+.col-12-6 {
+	width: 50%;
 	float: left;
 }
 
@@ -42,7 +50,10 @@ body {
 	text-align: center;
 }
 
-.score {
+.state {
+	max-width: 50%;
+	height: 50px;
+	margin: 0px 25%;
 	padding: 5px 0px;
 	font-size: 30px;
 	color: #002200;
@@ -73,6 +84,17 @@ body {
 	outline-offset: 3px;
 }
 
+.disabled {
+	/* 
+		눈물의 important
+		style attribute로 지정된 것보다 우선순위를 높이기위해 어쩔 수 없었음.
+		style attribute로 지정된 것 -> class를 통한 css 적용을 하면 비효율적인 코드를 작성하게 되어 이 방법 선택
+	*/
+	background: transparent !important;
+}
+.disabled:hover {
+	outline: transparent;
+}
 
 /* PROGRESS */
 .progress {
@@ -108,7 +130,10 @@ body {
   width: 100%;
 }
 
-/* PROGRESS ANIMATIONS */
+/* 
+	PROGRESS ANIMATIONS 
+	http://cubic-bezier.com/
+*/
 @keyframes width {
   0%, 100% {
     transition-timing-function: linear;
