@@ -4,6 +4,7 @@ html {
 	font-family: 'Hanna', serif;
 	width: 99%;
 	height: 98%;
+	cursor: default;
 }
 
 body {
@@ -22,13 +23,22 @@ body {
 	float: left;
 }
 
+.countdown {
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    font-size: 100px;
+}
+
 .modal-background {
 	position: absolute;
 	background: #000000;
 	width: 99%;
 	height: 99%;
 	opacity: 0.9;
-	transition: 1s;
+	transition: 0.5s;
 	z-index: 10;
 }
 
@@ -172,7 +182,7 @@ body {
 
 /* animation-duration: 10s; 를 Javascript로 제어 */
 .progress-bar {
-  animation-duration: 6s;
+  animation-duration: 0s;
   animation-name: width;
   background-image: linear-gradient(to right, #4cd964, #5ac8fa, #007aff, #34aadc, #5856d6, #ff2d55);
   background-size: 30em 0.5em;

@@ -214,18 +214,40 @@ $('.block').on('click', function(event) {
 
 $('#normal-mode').on('click', function(event) {
 	isHard = false;
+	startGame();
 });
 
 $('#hard-mode').on('click', function(event) {
 	isHard = true;
+	startGame();
 });
 
 // 게임 시작 함수호출
 
-$(document).ready(startNormalGame());
+function startGame() {
+	hideModal();
+	showCountDown();
+	setTimeout(function() {
+		$('.modal-background').css('display', 'none');
+		progressGame();	
+	}, 3500);	// 3.5초 후 시작
+	
+}
 
-function startNormalGame() {
-	progressGame();
+function hideModal() {
+	$('.modal-menu').css('display', 'none');
+}
+
+function showCountDown() {
+	for(let i = 0; i < 3; i++) {
+		setTimeout(function() {
+			$('.countdown').text((3-i));
+		}, i*1000);
+	}
+	setTimeout(function() {
+		$('.countdown').text(('Start'));
+		$('.modal-background').css('opacity', '0.0');
+	}, 3000);
 }
 
 
