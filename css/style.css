@@ -27,7 +27,8 @@ body {
 	background: #000000;
 	width: 99%;
 	height: 99%;
-	opacity: 0.7;
+	opacity: 0.9;
+	transition: 1s;
 	z-index: 10;
 }
 
@@ -37,11 +38,37 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    height: 800px;
+    height: 600px;
     width: 600px;
     border: 1px solid #ffffff;
     border-radius: 10px;
     z-index: 20;
+}
+
+.modal-wrapper {
+	padding: 100px 0px;
+}
+
+.buttons-wrapper {
+	width: 300px;
+	padding: 50px 150px;
+}
+
+.button {
+	width: 300px;
+	height: 30px;
+	margin: 10px 0px;
+	padding: 10px 0px;
+	border-radius: 10px;
+	font-size: 30px;
+	text-align: center;
+	cursor:pointer;
+	transition: 1s;
+
+	background: #456789;
+}
+.button:hover {
+	background: #abcdef;
 }
 
 .game-wrapper {
@@ -49,7 +76,7 @@ body {
 	height: 100%;
 }
 
-.menu-wrapper {
+.score-board-wrapper {
 	height: 220px;
 	background-color: #c0ffee;
 	border-bottom: #ff0000 solid 3px;
@@ -62,13 +89,19 @@ body {
 	text-align: center;
 }
 
+.sub-title {
+	padding: 3px 0px;
+	font-size: 30px;
+	color: #123456;
+	text-align: center;
+}
+
 .color {
 	max-width: 50%;
 	height: 50px;
 	margin: 0px 25%;
 	padding: 5px 0px;
 	font-size: 35px;
-	color: #444444;
 	text-align: center;
 }
 
@@ -102,7 +135,7 @@ body {
 	margin: 1.5%;
 	border-radius: 8%;
 	background: #ffffff;
-	transition: 1.0s;
+	transition: 0.5s;
 }
 .block:hover {
 	outline: #ffffff solid 5px;

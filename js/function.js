@@ -153,6 +153,7 @@ var timerSecond;
 
 var seqCorrectCount = 0;
 
+var isHard = false;
 
 function hexToRgb(hex) {
     var regArray = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -180,7 +181,7 @@ $('.block').on('click', function(event) {
 		clearGameTimer();	// 타이머 제거
 		$(event.target).removeClass("correct")
 		addAndDrawScore();
-		progressNormalGame();
+		progressGame();
 
 		// Combo 설정
 		seqCorrectCount++;
@@ -211,18 +212,25 @@ $('.block').on('click', function(event) {
 	}
 });
 
+$('#normal-mode').on('click', function(event) {
+	isHard = false;
+});
+
+$('#hard-mode').on('click', function(event) {
+	isHard = true;
+});
 
 // 게임 시작 함수호출
 
 $(document).ready(startNormalGame());
 
 function startNormalGame() {
-	progressNormalGame();
+	progressGame();
 }
 
 
 // 일반 게임 함수 (매 Level마다 호출됨)
-function progressNormalGame() {
+function progressGame() {
 	$('.disabled').removeClass('disabled');
 
 	var correctAnswerIndex;
@@ -259,6 +267,20 @@ function pickColor(pickColorNumber) {
 
 function calculateTimerSecond(level) {
 	return (3*level+3)/level + 3;
+}
+
+function calculateComplementaryColor(rgbString) {
+	var regArray = /(.*?)rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(rgbString);
+	var complementaryRgbString = "rgb(";
+
+	complementaryRgbString += (255 - parseInt(regArray[2], 10));
+	complementaryRgbString += ", ";
+	complementaryRgbString += (255 - parseInt(regArray[3], 10));
+	complementaryRgbString += ", ";
+	complementaryRgbString += (255 - parseInt(regArray[4], 10));
+	complementaryRgbString += ")";
+
+	return complementaryRgbString;
 }
 
 function progressBarRefresh(timerSecond) {
@@ -301,16 +323,34 @@ function drawColorAtBlock(blockCount, index) {
 	$("#block-" + blockCount).css("background", colorArray[index+1]);
 }
 
+function drawColorAtScoreBoard(hex) {
+	var correctAnswerRgbString = hexToRgb(hex);
+
+	console.log(correctAnswerRgbString);
+
+	var complementaryRgbString = calculateComplementaryColor(correctAnswerRgbString);
+	$('.score-board-wrapper').css('background-color', correctAnswerRgbString);
+	$('.score-board-wrapper').css('color', complementaryRgbString);
+}
+
+function clearColorAtScoreBoard() {
+	$('.score-board-wrapper').removeAttr('style');
+}
+
 function signCorrectBlock(correctAnswerIndex) {
 	$("#block-" + (correctAnswerIndex)).addClass("correct");
 }
 
 	// Menu에 값을 띄워준다.
 function displayColorValues(correctColorIndex) {
-	// 
 	$("#hex").text(colorArray[correctColorIndex+1]);
 	$("#name").text(colorArray[correctColorIndex]);
 	$("#rgb").text(hexToRgb(colorArray[correctColorIndex+1]));
+
+	if(isHard === true)
+		clearColorAtScoreBoard();
+	else
+		drawColorAtScoreBoard(colorArray[correctColorIndex+1]);
 }
 
 function addAndDrawScore() {
