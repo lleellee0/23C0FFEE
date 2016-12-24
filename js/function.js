@@ -152,6 +152,9 @@ let prevIncorrectTime;	// 이전에 오답을 입력했던 시간 (레벨 시작
 let timerSecond;
 
 let seqCorrectCount = 0;
+let maxSeqCorrectCount = 0;
+let correctCount = 0;
+let incorrectCount = 0;
 
 let isHard = false;
 
@@ -186,6 +189,13 @@ $('.block').on('click', function(event) {
 		// Combo 설정
 		seqCorrectCount++;
 		$('#combo').text(seqCorrectCount);
+
+		// 최대 Combo 기록
+		if(maxSeqCorrectCount < seqCorrectCount)
+			maxSeqCorrectCount = seqCorrectCount;
+
+		// 정답 횟수 증가
+		correctCount++;
 	}
 	else {	// 오답인 경우
 		$(event.target).addClass("disabled");
@@ -209,6 +219,9 @@ $('.block').on('click', function(event) {
 
 		seqCorrectCount = 0;
 		$('#combo').text(seqCorrectCount);
+
+		// 오답 횟수 증가
+		incorrectCount++;
 	}
 });
 
@@ -222,20 +235,45 @@ $('#hard-mode').on('click', function(event) {
 	startGame();
 });
 
+
+$('#return-menu').on('click', function(event) {
+	$('#result').addClass('display-none');
+	$('#menu').removeClass('display-none');
+});
+
 // 게임 시작 함수호출
 
 function startGame() {
-	hideModal();
+	initVariables();
+	hideMenuModal();
 	showCountDown();
 	setTimeout(function() {
-		$('.modal-background').css('display', 'none');
+		$('.modal-background').addClass('display-none');
 		progressGame();	
 	}, 3500);	// 3.5초 후 시작
-	
 }
 
-function hideModal() {
-	$('.modal-menu').css('display', 'none');
+function initVariables() {
+	level = 1;
+	score = 0;
+	seqCorrectCount = 0;
+	maxSeqCorrectCount = 0;
+	correctCount = 0;
+	incorrectCount = 0;
+}
+
+function hideMenuModal() {
+	$('#menu').addClass('display-none');
+}
+function showMenuModal() {
+	$('#menu').removeClass('display-none');
+}
+
+function hideResultModal() {
+	$('#result').addClass('display-none');
+}
+function showResultModal() {
+	$('#result').removeClass('display-none');
 }
 
 function showCountDown() {
@@ -395,7 +433,24 @@ function finishGame() {
 	$(".progress-bar").css("display", "none").height();
 	$(".progress-bar").css("display", "block");
 
-//	alert("Bang!!");
+
+	// 결과창 보여주기
+	$('.modal-background').removeClass('display-none');
+	$('.modal-background').css('opacity', '0.9');
+	showResultModal();
+	displayResultValues();
+}
+
+function displayResultValues() {
+	if(isHard)
+		$('#result-mode').text('Hard');
+	else
+		$('#result-mode').text('Normal');
+
+	$('#result-score').text(score);
+	$('#result-level').text(level - 1);
+	$('#result-max-seq-count').text(maxSeqCorrectCount);
+	$('#result-incorrect').text(incorrectCount);
 }
 
 //$(".progress-bar").css("animation-duration", "10s");

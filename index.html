@@ -2,6 +2,11 @@
 <html>
 	<head>
 		<meta charset="utf-8">
+		<!-- 
+			실수로라도 확대가 되지 않도록 
+			http://aboooks.tistory.com/352
+		-->
+		<meta name="viewport" content="user-scalable=no">
 
 		<title>#C0FFEE</title>
 
@@ -17,7 +22,7 @@
 
 			</div>
 		</div>
-		<div class="modal-menu">
+		<div id="menu" class="modal">
 			<div class="modal-wrapper">
 				<div class="title">
 					#C0FFEE
@@ -34,6 +39,35 @@
 					</div>
 					<div id="about" class="button">
 						About
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="result" class="modal display-none">
+			<div class="modal-wrapper">
+				<div class="title">
+					RESULT
+				</div>
+				<div class="space20">
+				</div>
+				<div class="sub-title">
+					<span id="result-mode"></span> 모드를 플레이
+				</div>
+				<div class="sub-title">
+					<span id="result-score"></span> 점을 획득
+				</div>
+				<div class="sub-title">
+					<span id="result-level"></span> 단계에 도달
+				</div>
+				<div class="sub-title">
+					<span id="result-max-seq-count"></span> Combo를 기록
+				</div>
+				<div class="sub-title">
+					<span id="result-incorrect"></span> 번 틀림
+				</div>
+				<div class="buttons-wrapper">
+					<div id="return-menu" class="button">
+						Return To Menu
 					</div>
 				</div>
 			</div>
