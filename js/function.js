@@ -1,4 +1,4 @@
-var colorArray = ["red", "#FF0000", 
+let colorArray = ["red", "#FF0000", 
 "crimson", "#DC143C", 
 "firebrick", "#B22222", 
 "maroon", "#800000", 
@@ -142,22 +142,22 @@ var colorArray = ["red", "#FF0000",
 // 총 140개의 색깔존재
 
 
-var level = 1;
-var timer;
-var pickedColorIndexes;
+let level = 1;
+let timer;
+let pickedColorIndexes;
 
-var score = 0;
-var levelStartTime;	// 빨리 정답을 맞추면 가점을 주기 위해 레벨마다 시작시간 기록
-var prevIncorrectTime;	// 이전에 오답을 입력했던 시간 (레벨 시작시 levelStartTime로 초기화)
-var timerSecond;
+let score = 0;
+let levelStartTime;	// 빨리 정답을 맞추면 가점을 주기 위해 레벨마다 시작시간 기록
+let prevIncorrectTime;	// 이전에 오답을 입력했던 시간 (레벨 시작시 levelStartTime로 초기화)
+let timerSecond;
 
-var seqCorrectCount = 0;
+let seqCorrectCount = 0;
 
-var isHard = false;
+let isHard = false;
 
 function hexToRgb(hex) {
-    var regArray = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    var rgbString = "rgb(";
+    let regArray = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    let rgbString = "rgb(";
 
     rgbString += parseInt(regArray[1], 16);
     rgbString += ", ";
@@ -190,7 +190,7 @@ $('.block').on('click', function(event) {
 	else {	// 오답인 경우
 		$(event.target).addClass("disabled");
 
-		var currentTime = new Date().getTime();
+		let currentTime = new Date().getTime();
 		timerSecond = timerSecond - ((currentTime - prevIncorrectTime)/1000.0 + 0.5);
 
 		if(timerSecond < 0)
@@ -255,7 +255,7 @@ function showCountDown() {
 function progressGame() {
 	$('.disabled').removeClass('disabled');
 
-	var correctAnswerIndex;
+	let correctAnswerIndex;
 	timerSecond = calculateTimerSecond(level++);
 	progressBarRefresh(timerSecond);	// Progress Bar 설정
 	setGameTimer(timerSecond);			// 타이머 설정(Progress Bar와 sync)
@@ -264,7 +264,7 @@ function progressGame() {
 	pickColor(9);								// 9개의 색 선택
 	correctAnswerIndex = getRandomInteger(9);	// 그중 한개의 정답 인덱스 선택 (배열이 아닌 블록에 대한 인덱스임.)
 
-	var blockCount = 0;
+	let blockCount = 0;
 	pickedColorIndexes.forEach(function(index) {
 		/*
 		 * correctAnswertIndex는 현재 블록 내의 인덱스를 의미하므로 이 색이 colorArray에서 어느 인덱스 인지를 넘겨줘야함.
@@ -292,8 +292,8 @@ function calculateTimerSecond(level) {
 }
 
 function calculateComplementaryColor(rgbString) {
-	var regArray = /(.*?)rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(rgbString);
-	var complementaryRgbString = "rgb(";
+	let regArray = /(.*?)rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(rgbString);
+	let complementaryRgbString = "rgb(";
 
 	complementaryRgbString += (255 - parseInt(regArray[2], 10));
 	complementaryRgbString += ", ";
@@ -346,11 +346,11 @@ function drawColorAtBlock(blockCount, index) {
 }
 
 function drawColorAtScoreBoard(hex) {
-	var correctAnswerRgbString = hexToRgb(hex);
+	let correctAnswerRgbString = hexToRgb(hex);
 
 	console.log(correctAnswerRgbString);
 
-	var complementaryRgbString = calculateComplementaryColor(correctAnswerRgbString);
+	let complementaryRgbString = calculateComplementaryColor(correctAnswerRgbString);
 	$('.score-board-wrapper').css('background-color', correctAnswerRgbString);
 	$('.score-board-wrapper').css('color', complementaryRgbString);
 }
@@ -376,8 +376,8 @@ function displayColorValues(correctColorIndex) {
 }
 
 function addAndDrawScore() {
-	var levelEndTime = new Date().getTime();
-	var currentTakeScore;
+	let levelEndTime = new Date().getTime();
+	let currentTakeScore;
 
 	currentTakeScore = Math.floor((1000000 / (levelEndTime - levelStartTime)));	// 빨리푼 경우 가산점
 	currentTakeScore *= Math.floor((10 + seqCorrectCount) / 10.0);	// 연속 정답 횟수 * 10% 씩 가산점
