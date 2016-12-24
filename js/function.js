@@ -142,6 +142,8 @@ let colorArray = ["red", "#FF0000",
 // 총 140개의 색깔존재
 
 
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 1. 전역 변수 선언 시작 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 let level = 1;
 let timer;
 let pickedColorIndexes;
@@ -158,37 +160,26 @@ let incorrectCount = 0;
 
 let isHard = false;
 
-function hexToRgb(hex) {
-    let regArray = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    let rgbString = "rgb(";
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 1. 전역 변수 선언 끝 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-    rgbString += parseInt(regArray[1], 16);
-    rgbString += ", ";
-    rgbString += parseInt(regArray[2], 16);
-	rgbString += ", ";
-    rgbString += parseInt(regArray[3], 16);
-    rgbString += ")";
-
-    return rgbString;
-}
-
-
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@블록에 대한 클릭이벤트 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 2. 이벤트 등록 시작 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 $('.block').on('click', function(event) {
-	if($(event.target).hasClass("disabled")) {	// 이미 클릭되어 오답처리된 블록
+	let $eventTarget = $(event.target);
+	let $combo = $('#combo');
+
+	if($eventTarget.hasClass("disabled")) {	// 이미 클릭되어 오답처리된 블록
 		return;
 	}
 
-
-	if($(event.target).hasClass("correct")) {	// 정답인경우
+	if($eventTarget.hasClass("correct")) {	// 정답인경우
 		clearGameTimer();	// 타이머 제거
-		$(event.target).removeClass("correct")
+		$eventTarget.removeClass("correct")
 		addAndDrawScore();
 		progressGame();
 
 		// Combo 설정
 		seqCorrectCount++;
-		$('#combo').text(seqCorrectCount);
+		$combo.text(seqCorrectCount);
 
 		// 최대 Combo 기록
 		if(maxSeqCorrectCount < seqCorrectCount)
@@ -198,7 +189,7 @@ $('.block').on('click', function(event) {
 		correctCount++;
 	}
 	else {	// 오답인 경우
-		$(event.target).addClass("disabled");
+		$eventTarget.addClass("disabled");
 
 		let currentTime = new Date().getTime();
 		timerSecond = timerSecond - ((currentTime - prevIncorrectTime)/1000.0 + 0.5);
@@ -208,9 +199,7 @@ $('.block').on('click', function(event) {
 
 		console.log("TimerSecond : " + timerSecond);
 
-		setProgressBarRefresh(timerSecond, (timerSecond / calculateTimerSecond(level - 1) * 100));
-
-//		console.log("prev : " + prevIncorrectTime + " currentTime : " + currentTime + " cur-prev : " + (currentTime - prevIncorrectTime) / 1000.0);
+		setProgressBarAndRefresh(timerSecond, (timerSecond / calculateTimerSecond(level - 1) * 100));
 
 		prevIncorrectTime = currentTime;
 
@@ -218,7 +207,7 @@ $('.block').on('click', function(event) {
 		setGameTimer(timerSecond);
 
 		seqCorrectCount = 0;
-		$('#combo').text(seqCorrectCount);
+		$combo.text(seqCorrectCount);
 
 		// 오답 횟수 증가
 		incorrectCount++;
@@ -241,8 +230,10 @@ $('#return-menu').on('click', function(event) {
 	$('#menu').removeClass('display-none');
 });
 
-// 게임 시작 함수호출
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 2. 이벤트 등록 끝 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 3. 동작 함수 시작 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// 게임 시작 함수
 function startGame() {
 	initVariables();
 	hideMenuModal();
@@ -260,32 +251,6 @@ function initVariables() {
 	maxSeqCorrectCount = 0;
 	correctCount = 0;
 	incorrectCount = 0;
-}
-
-function hideMenuModal() {
-	$('#menu').addClass('display-none');
-}
-function showMenuModal() {
-	$('#menu').removeClass('display-none');
-}
-
-function hideResultModal() {
-	$('#result').addClass('display-none');
-}
-function showResultModal() {
-	$('#result').removeClass('display-none');
-}
-
-function showCountDown() {
-	for(let i = 0; i < 3; i++) {
-		setTimeout(function() {
-			$('.countdown').text((3-i));
-		}, i*1000);
-	}
-	setTimeout(function() {
-		$('.countdown').text(('Start'));
-		$('.modal-background').css('opacity', '0.0');
-	}, 3000);
 }
 
 
@@ -319,51 +284,6 @@ function progressGame() {
 	prevIncorrectTime = levelStartTime;
 }
 
-function pickColor(pickColorNumber) {
-	while(pickedColorIndexes.size !== pickColorNumber) {
-		pickedColorIndexes.add(getRandomInteger(colorArray.length/2) * 2);
-	}
-}
-
-function calculateTimerSecond(level) {
-	return (3*level+3)/level + 3;
-}
-
-function calculateComplementaryColor(rgbString) {
-	let regArray = /(.*?)rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(rgbString);
-	let complementaryRgbString = "rgb(";
-
-	complementaryRgbString += (255 - parseInt(regArray[2], 10));
-	complementaryRgbString += ", ";
-	complementaryRgbString += (255 - parseInt(regArray[3], 10));
-	complementaryRgbString += ", ";
-	complementaryRgbString += (255 - parseInt(regArray[4], 10));
-	complementaryRgbString += ")";
-
-	return complementaryRgbString;
-}
-
-function progressBarRefresh(timerSecond) {
-	$(".progress-wrapper").css("width", "100%");
-	$(".progress-bar").css("animation-duration", timerSecond + "s");	// Progress Bar 애니메이션 시간 지정
-
-	// 아래 코드는 아래 링크를 보고 해결
-	// http://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes/3485654#14382251
-	$(".progress-bar").css("display", "none").height();
-	$(".progress-bar").css("display", "block");
-}
-
-function setProgressBarRefresh(timerSecond, widthPercent) {
-	console.log(widthPercent);
-	$(".progress-wrapper").css("width", widthPercent + "%");
-	$(".progress-bar").css("animation-duration", timerSecond + "s");	// Progress Bar 애니메이션 시간 지정
-
-	// 아래 코드는 아래 링크를 보고 해결
-	// http://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes/3485654#14382251
-	$(".progress-bar").css("display", "none").height();
-	$(".progress-bar").css("display", "block");
-}
-
 function setGameTimer(timerSecond) {
 	timer = setTimeout(function() {
 		finishGame();
@@ -374,9 +294,60 @@ function clearGameTimer() {
 	clearTimeout(timer);
 }
 
-// 0 <= x <= (limit - 1) 반환
-function getRandomInteger(limit) {
-	return (Math.floor(Math.random() * limit));
+
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 3. 동작 함수 끝 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 4. 화면 관련 함수 시작 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+function showCountDown() {
+	$countdown = $('.countdown');
+
+	for(let i = 0; i < 3; i++) {
+		setTimeout(function() {
+			$countdown.text((3-i));
+		}, i*1000);
+	}
+	setTimeout(function() {
+		$countdown.text(('Start'));
+		$('.modal-background').css('opacity', '0.0');
+	}, 3000);
+}
+
+function hideMenuModal() {
+	$('#menu').addClass('display-none');
+}
+function showMenuModal() {
+	$('#menu').removeClass('display-none');
+}
+
+function hideResultModal() {
+	$('#result').addClass('display-none');
+}
+function showResultModal() {
+	$('#result').removeClass('display-none');
+}
+
+function progressBarRefresh(timerSecond) {
+	let $progressBar = $(".progress-bar");
+
+	$(".progress-wrapper").css("width", "100%");
+	$progressBar.css("animation-duration", timerSecond + "s");	// Progress Bar 애니메이션 시간 지정
+
+	// 아래 코드는 아래 링크를 보고 해결
+	// http://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes/3485654#14382251
+	$progressBar.css("display", "none").height();
+	$progressBar.css("display", "block");
+}
+
+function setProgressBarAndRefresh(timerSecond, widthPercent) {
+	console.log(widthPercent);
+	$(".progress-wrapper").css("width", widthPercent + "%");
+	$progressBar.css("animation-duration", timerSecond + "s");	// Progress Bar 애니메이션 시간 지정
+
+	// 아래 코드는 아래 링크를 보고 해결
+	// http://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes/3485654#14382251
+	$progressBar.css("display", "none").height();
+	$progressBar.css("display", "block");
 }
 
 function drawColorAtBlock(blockCount, index) {
@@ -384,13 +355,12 @@ function drawColorAtBlock(blockCount, index) {
 }
 
 function drawColorAtScoreBoard(hex) {
+	let $scoreBoardWrapper = $('.score-board-wrapper');
 	let correctAnswerRgbString = hexToRgb(hex);
 
-	console.log(correctAnswerRgbString);
-
 	let complementaryRgbString = calculateComplementaryColor(correctAnswerRgbString);
-	$('.score-board-wrapper').css('background-color', correctAnswerRgbString);
-	$('.score-board-wrapper').css('color', complementaryRgbString);
+	$scoreBoardWrapper.css('background-color', correctAnswerRgbString);
+	$scoreBoardWrapper.css('color', complementaryRgbString);
 }
 
 function clearColorAtScoreBoard() {
@@ -425,18 +395,21 @@ function addAndDrawScore() {
 }
 
 function finishGame() {
+	let $progressBar = $(".progress-bar");
+	let $modalBackground = $('.modal-background');
+
 	$(".progress-wrapper").css("width", "100%");
-	$(".progress-bar").css("animation-duration", "0s");	// 한번 더 애니메이션이 발생하는 버그를 애니메이션 시간을 0으로 바꿔서 해결 (미봉책인 것 같다.)
+	$progressBar.css("animation-duration", "0s");	// 한번 더 애니메이션이 발생하는 버그를 애니메이션 시간을 0으로 바꿔서 해결 (미봉책인 것 같다.)
 
 	// 아래 코드는 아래 링크를 보고 해결
 	// http://stackoverflow.com/questions/3485365/how-can-i-force-webkit-to-redraw-repaint-to-propagate-style-changes/3485654#14382251
-	$(".progress-bar").css("display", "none").height();
-	$(".progress-bar").css("display", "block");
+	$progressBar.css("display", "none").height();
+	$progressBar.css("display", "block");
 
 
 	// 결과창 보여주기
-	$('.modal-background').removeClass('display-none');
-	$('.modal-background').css('opacity', '0.9');
+	$modalBackground.removeClass('display-none');
+	$modalBackground.css('opacity', '0.9');
 	showResultModal();
 	displayResultValues();
 }
@@ -453,4 +426,51 @@ function displayResultValues() {
 	$('#result-incorrect').text(incorrectCount);
 }
 
-//$(".progress-bar").css("animation-duration", "10s");
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 4. 화면 관련 함수 끝 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 5. API 시작 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+function hexToRgb(hex) {
+    let regArray = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    let rgbString = "rgb(";
+
+    rgbString += parseInt(regArray[1], 16);
+    rgbString += ", ";
+    rgbString += parseInt(regArray[2], 16);
+	rgbString += ", ";
+    rgbString += parseInt(regArray[3], 16);
+    rgbString += ")";
+
+    return rgbString;
+}
+
+// 0 <= x <= (limit - 1) 반환
+function getRandomInteger(limit) {
+	return (Math.floor(Math.random() * limit));
+}
+
+function calculateComplementaryColor(rgbString) {
+	let regArray = /(.*?)rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(rgbString);
+	let complementaryRgbString = "rgb(";
+
+	complementaryRgbString += (255 - parseInt(regArray[2], 10));
+	complementaryRgbString += ", ";
+	complementaryRgbString += (255 - parseInt(regArray[3], 10));
+	complementaryRgbString += ", ";
+	complementaryRgbString += (255 - parseInt(regArray[4], 10));
+	complementaryRgbString += ")";
+
+	return complementaryRgbString;
+}
+
+function pickColor(pickColorNumber) {
+	while(pickedColorIndexes.size !== pickColorNumber) {
+		pickedColorIndexes.add(getRandomInteger(colorArray.length/2) * 2);
+	}
+}
+
+function calculateTimerSecond(level) {
+	return (3*level+3)/level + 3;
+}
+
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 5. API 끝 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
