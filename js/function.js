@@ -197,8 +197,6 @@ $('.block').on('click', function(event) {
 		if(timerSecond < 0)
 			timerSecond = 0;
 
-		console.log("TimerSecond : " + timerSecond);
-
 		setProgressBarAndRefresh(timerSecond, (timerSecond / calculateTimerSecond(level - 1) * 100));
 
 		prevIncorrectTime = currentTime;
@@ -300,7 +298,7 @@ function clearGameTimer() {
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 4. 화면 관련 함수 시작 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 function showCountDown() {
-	$countdown = $('.countdown');
+	let $countdown = $('.countdown');
 
 	for(let i = 0; i < 3; i++) {
 		setTimeout(function() {
@@ -340,7 +338,8 @@ function progressBarRefresh(timerSecond) {
 }
 
 function setProgressBarAndRefresh(timerSecond, widthPercent) {
-	console.log(widthPercent);
+	let $progressBar = $(".progress-bar");
+
 	$(".progress-wrapper").css("width", widthPercent + "%");
 	$progressBar.css("animation-duration", timerSecond + "s");	// Progress Bar 애니메이션 시간 지정
 

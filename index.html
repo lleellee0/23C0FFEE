@@ -3,20 +3,19 @@
 	<head>
 		<meta charset="utf-8">
 		<!-- 
-			실수로라도 확대가 되지 않도록 
+			실수로라도 확대가 되지 않도록, 디바이스 크기에 맞춰주기(미디어 쿼리를 위해)
 			http://aboooks.tistory.com/352
 		-->
-		<meta name="viewport" content="user-scalable=no">
+		<meta name="viewport" content="width=device-width, user-scalable=no">
 
 		<title>#C0FFEE</title>
 
-<!--
-		<link rel="stylesheet" type="text/css" media="(min-width: 700px)" href="css/style.css"/>
-		<link rel="stylesheet" type="text/css" media="(max-width: 699px)" href="css/mobile_style.css"/>
--->
-		<link rel="stylesheet" type="text/css" href="css/style.css"/>
+
+		<link rel="stylesheet" type="text/css" media="(min-width: 700px)" href="css/desktop-style.css"/>
+		<link rel="stylesheet" type="text/css" media="(max-width: 699px)" href="css/mobile-style.css"/>
 	</head>
 	<body>
+	
 		<div class="modal-background">
 			<div class="countdown">
 
@@ -43,6 +42,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div id="result" class="modal display-none">
 			<div class="modal-wrapper">
 				<div class="title">
@@ -72,19 +72,20 @@
 				</div>
 			</div>
 		</div>
+		
 		<div class="game-wrapper">
 			<div class="score-board-wrapper">
 				<div class="title">
 					#C0FFEE
 				</div>
 				<div class="color">
-					<div id="hex" class="hex col-12-4">
+					<div id="hex" class="hex">
 						#000000
 					</div>
-					<div id="name" class="name col-12-4">
+					<div id="name" class="name">
 						black
 					</div>
-					<div id="rgb" class="rgb col-12-4">
+					<div id="rgb" class="rgb">
 						rgb(0, 0, 0)
 					</div>
 				</div>
