@@ -233,7 +233,7 @@ $('#return-menu').on('click', function(event) {
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 3. 동작 함수 시작 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 // 게임 시작 함수
 function startGame() {
-	initVariables();
+	initVariablesAndScore();
 	hideMenuModal();
 	showCountDown();
 	setTimeout(function() {
@@ -242,13 +242,16 @@ function startGame() {
 	}, 3500);	// 3.5초 후 시작
 }
 
-function initVariables() {
+function initVariablesAndScore() {
 	level = 1;
 	score = 0;
 	seqCorrectCount = 0;
 	maxSeqCorrectCount = 0;
 	correctCount = 0;
 	incorrectCount = 0;
+
+	$('#score').text(score);
+	$('#combo').text(seqCorrectCount);
 }
 
 
