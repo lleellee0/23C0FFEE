@@ -1,4 +1,4 @@
-let colorArray = ["red", "#FF0000", 
+var colorArray = ["red", "#FF0000", 
 "crimson", "#DC143C", 
 "firebrick", "#B22222", 
 "maroon", "#800000", 
@@ -62,7 +62,7 @@ let colorArray = ["red", "#FF0000",
 "steelblue", "#4682B4", 
 "aquamarine", "#7FFFD4", 
 "powderblue", "#B0E0E6", 
-"paleturquoise", "#AFEEEE", 
+"pavarurquoise", "#AFEEEE", 
 "lightblue", "#ADD8E6", 
 "lightsteelblue", "#B0C4DE", 
 "skyblue", "#87CEEB", 
@@ -86,23 +86,23 @@ let colorArray = ["red", "#FF0000",
 "mediumslateblue", "#7B68EE", 
 "mediumpurple", "#9370DB", 
 "darkorchid", "#9932CC", 
-"darkviolet", "#9400D3", 
-"blueviolet", "#8A2BE2", 
+"darkviovar", "#9400D3", 
+"blueviovar", "#8A2BE2", 
 "mediumorchid", "#BA55D3", 
 "plum", "#DDA0DD", 
 "lavender", "#E6E6FA", 
 "thistle", "#D8BFD8", 
 "orchid", "#DA70D6", 
-"violet", "#EE82EE", 
+"viovar", "#EE82EE", 
 "indigo", "#4B0082", 
 "darkmagenta", "#8B008B", 
 "purple", "#800080", 
-"mediumvioletred", "#C71585", 
+"mediumviovarred", "#C71585", 
 "deeppink", "#FF1493", 
 "fuchsia", "#FF00FF", 
 "magenta", "#FF00FF", 
 "hotpink", "#FF69B4", 
-"palevioletred", "#DB7093", 
+"paleviovarred", "#DB7093", 
 "lightpink", "#FFB6C1", 
 "pink", "#FFC0CB", 
 "mistyrose", "#FFE4E1", 
@@ -144,28 +144,28 @@ let colorArray = ["red", "#FF0000",
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 1. 전역 변수 선언 시작 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-let level = 1;
-let timer;
-let pickedColorIndexes;
+var level = 1;
+var timer;
+var pickedColorIndexes;
 
-let score = 0;
-let levelStartTime;	// 빨리 정답을 맞추면 가점을 주기 위해 레벨마다 시작시간 기록
-let prevIncorrectTime;	// 이전에 오답을 입력했던 시간 (레벨 시작시 levelStartTime로 초기화)
-let timerSecond;
+var score = 0;
+var levelStartTime;	// 빨리 정답을 맞추면 가점을 주기 위해 레벨마다 시작시간 기록
+var prevIncorrectTime;	// 이전에 오답을 입력했던 시간 (레벨 시작시 levelStartTime로 초기화)
+var timerSecond;
 
-let seqCorrectCount = 0;
-let maxSeqCorrectCount = 0;
-let correctCount = 0;
-let incorrectCount = 0;
+var seqCorrectCount = 0;
+var maxSeqCorrectCount = 0;
+var correctCount = 0;
+var incorrectCount = 0;
 
-let isHard = false;
+var isHard = false;
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 1. 전역 변수 선언 끝 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 2. 이벤트 등록 시작 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 $('.block').on('click', function(event) {
-	let $eventTarget = $(event.target);
-	let $combo = $('#combo');
+	var $eventTarget = $(event.target);
+	var $combo = $('#combo');
 
 	if($eventTarget.hasClass("disabled")) {	// 이미 클릭되어 오답처리된 블록
 		return;
@@ -191,7 +191,7 @@ $('.block').on('click', function(event) {
 	else {	// 오답인 경우
 		$eventTarget.addClass("disabled");
 
-		let currentTime = new Date().getTime();
+		var currentTime = new Date().getTime();
 		timerSecond = timerSecond - ((currentTime - prevIncorrectTime)/1000.0 + 0.5);
 
 		if(timerSecond < 0)
@@ -259,7 +259,7 @@ function initVariablesAndScore() {
 function progressGame() {
 	$('.disabled').removeClass('disabled');
 
-	let correctAnswerIndex;
+	var correctAnswerIndex;
 	timerSecond = calculateTimerSecond(level++);
 	progressBarRefresh(timerSecond);	// Progress Bar 설정
 	setGameTimer(timerSecond);			// 타이머 설정(Progress Bar와 sync)
@@ -268,7 +268,7 @@ function progressGame() {
 	pickColor(9);								// 9개의 색 선택
 	correctAnswerIndex = getRandomInteger(9);	// 그중 한개의 정답 인덱스 선택 (배열이 아닌 블록에 대한 인덱스임.)
 
-	let blockCount = 0;
+	var blockCount = 0;
 	pickedColorIndexes.forEach(function(index) {
 		/*
 		 * correctAnswertIndex는 현재 블록 내의 인덱스를 의미하므로 이 색이 colorArray에서 어느 인덱스 인지를 넘겨줘야함.
@@ -301,9 +301,9 @@ function clearGameTimer() {
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 4. 화면 관련 함수 시작 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 function showCountDown() {
-	let $countdown = $('.countdown');
+	var $countdown = $('.countdown');
 
-	for(let i = 0; i < 3; i++) {
+	for(var i = 0; i < 3; i++) {
 		setTimeout(function() {
 			$countdown.text((3-i));
 		}, i*1000);
@@ -329,7 +329,7 @@ function showResultModal() {
 }
 
 function progressBarRefresh(timerSecond) {
-	let $progressBar = $(".progress-bar");
+	var $progressBar = $(".progress-bar");
 
 	$(".progress-wrapper").css("width", "100%");
 	$progressBar.css("animation-duration", timerSecond + "s");	// Progress Bar 애니메이션 시간 지정
@@ -341,7 +341,7 @@ function progressBarRefresh(timerSecond) {
 }
 
 function setProgressBarAndRefresh(timerSecond, widthPercent) {
-	let $progressBar = $(".progress-bar");
+	var $progressBar = $(".progress-bar");
 
 	$(".progress-wrapper").css("width", widthPercent + "%");
 	$progressBar.css("animation-duration", timerSecond + "s");	// Progress Bar 애니메이션 시간 지정
@@ -357,10 +357,10 @@ function drawColorAtBlock(blockCount, index) {
 }
 
 function drawColorAtScoreBoard(hex) {
-	let $scoreBoardWrapper = $('.score-board-wrapper');
-	let correctAnswerRgbString = hexToRgb(hex);
+	var $scoreBoardWrapper = $('.score-board-wrapper');
+	var correctAnswerRgbString = hexToRgb(hex);
 
-	let complementaryRgbString = calculateComplementaryColor(correctAnswerRgbString);
+	var complementaryRgbString = calculateComplementaryColor(correctAnswerRgbString);
 	$scoreBoardWrapper.css('background-color', correctAnswerRgbString);
 	$scoreBoardWrapper.css('color', complementaryRgbString);
 }
@@ -386,8 +386,8 @@ function displayColorValues(correctColorIndex) {
 }
 
 function addAndDrawScore() {
-	let levelEndTime = new Date().getTime();
-	let currentTakeScore;
+	var levelEndTime = new Date().getTime();
+	var currentTakeScore;
 
 	currentTakeScore = Math.floor((1000000 / (levelEndTime - levelStartTime)));	// 빨리푼 경우 가산점
 	currentTakeScore *= Math.floor((10 + seqCorrectCount) / 10.0);	// 연속 정답 횟수 * 10% 씩 가산점
@@ -397,8 +397,8 @@ function addAndDrawScore() {
 }
 
 function finishGame() {
-	let $progressBar = $(".progress-bar");
-	let $modalBackground = $('.modal-background');
+	var $progressBar = $(".progress-bar");
+	var $modalBackground = $('.modal-background');
 
 	$(".progress-wrapper").css("width", "100%");
 	$progressBar.css("animation-duration", "0s");	// 한번 더 애니메이션이 발생하는 버그를 애니메이션 시간을 0으로 바꿔서 해결 (미봉책인 것 같다.)
@@ -433,8 +433,8 @@ function displayResultValues() {
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 5. API 시작 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 function hexToRgb(hex) {
-    let regArray = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    let rgbString = "rgb(";
+    var regArray = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    var rgbString = "rgb(";
 
     rgbString += parseInt(regArray[1], 16);
     rgbString += ", ";
@@ -452,8 +452,8 @@ function getRandomInteger(limit) {
 }
 
 function calculateComplementaryColor(rgbString) {
-	let regArray = /(.*?)rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(rgbString);
-	let complementaryRgbString = "rgb(";
+	var regArray = /(.*?)rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(rgbString);
+	var complementaryRgbString = "rgb(";
 
 	complementaryRgbString += (255 - parseInt(regArray[2], 10));
 	complementaryRgbString += ", ";
