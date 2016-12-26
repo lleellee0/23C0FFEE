@@ -303,11 +303,18 @@ function clearGameTimer() {
 function showCountDown() {
 	var $countdown = $('.countdown');
 
-	for(var i = 0; i < 3; i++) {
-		setTimeout(function() {
-			$countdown.text((3-i));
-		}, i*1000);
-	}
+	setTimeout(function() {
+		$countdown.text((3-0));
+	}, 0*1000);
+
+	setTimeout(function() {
+		$countdown.text((3-1));
+	}, 1*1000);
+
+	setTimeout(function() {
+		$countdown.text((3-2));
+	}, 2*1000);
+
 	setTimeout(function() {
 		$countdown.text(('Start'));
 		$('.modal-background').css('opacity', '0.0');
