@@ -174,11 +174,6 @@ a:hover {
 	background: #ffffff;
 	transition: 0.5s;
 }
-.block:hover {
-	outline: #ffffff solid 5px;
-	outline-style: dashed;
-	outline-offset: 3px;
-}
 
 .disabled {
 	/* 
